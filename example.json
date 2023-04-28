@@ -3,7 +3,17 @@
         "dt": "var",
         "func_name": "__global",
         "name": "p",
-        "label": "str"
+        "label": "str",
+        "loc": [
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                16
+            ]
+        ]
     },
     {
         "dt": "ret",
@@ -15,18 +25,32 @@
         "dt": "param",
         "func_name": "my_function",
         "name": "x",
-        "label": "int"
+        "label": "int",
+        "loc": [
+            [
+                3,
+                16
+            ],
+            [
+                3,
+                17
+            ]
+        ]
     },
     {
         "dt": "param",
         "func_name": "my_function",
         "name": "y",
-        "label": "float"
-    },
-    {
-        "dt": "var",
-        "func_name": "my_function",
-        "name": "p",
-        "label": "int"
+        "label": "float",
+        "loc": [
+            [
+                3,
+                24
+            ],
+            [
+                3,
+                25
+            ]
+        ]
     }
 ]
