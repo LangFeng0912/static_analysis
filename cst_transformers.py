@@ -52,7 +52,7 @@ class TypeAnnotationFinder(cst.CSTTransformer):
     def visit_AnnAssign(self, node: cst.AnnAssign) -> None:
         pos = self.__get_line_column_no(node)
         if pos not in self.var_list:
-            type_dict = dict(dt="var", func_name="__global", name=node.target.value,
+            type_dict = dict(dt="var", func_name="__global__", name=node.target.value,
                              label=node.annotation.annotation.value, loc=pos)
             self.annotated_types.append(type_dict)
 
@@ -74,12 +74,13 @@ class TypeAnnotationMasker(cst.CSTTransformer):
         return (lc.start.line, lc.start.column), (lc.end.line, lc.end.column)
 
     def leave_FunctionDef(self, original_node: cst.FunctionDef, updated_node):
-
+        # print(original_node)
         if self.find == False and original_node.name.value == self.target["func_name"]:
-            # for return types
 
+            # for return types
             if self.dt == "ret" and original_node.returns is not None:
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.name.value})"))
+                self.find = True
                 return cst.FlattenSentinel([updated_node.with_changes(returns=None), log_stmt])
 
             # for parameters
@@ -87,6 +88,7 @@ class TypeAnnotationMasker(cst.CSTTransformer):
                 updated_params = []
                 for param in original_node.params.params:
                     if param.name.value == self.target["name"]:
+                        self.find = True
                         param_untyped = cst.Param(param.with_changes(annotation=None, comma=None))
                         updated_params.append(param_untyped)
                     else:
@@ -96,13 +98,30 @@ class TypeAnnotationMasker(cst.CSTTransformer):
                     params=cst.Parameters(updated_params)), log_stmt]
                 )
 
+            # variables in functions
+            if self.dt == "var":
+                statements = []
+                for statement in original_node.body.body:
+                    if type(statement.body[0]) == cst.AnnAssign and statement.body[0].target.value == self.target[
+                        "name"]:
+                        self.find = True
+                        log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({statement.body[0].target.value})"))
+                        updated_var_node = cst.Assign(targets=[cst.AssignTarget(target=statement.body[0].target)],
+                                                      value=statement.body[0].value)
+                        masrev_line = cst.SimpleStatementLine(cst.FlattenSentinel([updated_var_node, log_stmt]))
+                        statements.append(masrev_line)
+                    else:
+                        statements.append(statement)
+                return updated_node.with_changes(
+                    body=cst.IndentedBlock(statements)
+                )
+
         else:
             return updated_node
 
     def leave_AnnAssign(self, original_node: cst.AnnAssign, updated_node) -> None:
-        if self.find == False and self.dt == "var":
+        if self.find == False and self.dt == "var" and self.target["func_name"] == "__global__":
             pos = self.__get_line_column_no(original_node)
-            print(pos)
             if pos == self.target["loc"] and original_node.target.value == self.target["name"]:
                 self.find = True
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.target.value})"))
