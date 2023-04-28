@@ -1,0 +1,32 @@
+[
+    {
+        "dt": "var",
+        "func_name": "__global",
+        "name": "p",
+        "label": "str"
+    },
+    {
+        "dt": "ret",
+        "func_name": "my_function",
+        "name": "ret_type",
+        "label": "int"
+    },
+    {
+        "dt": "param",
+        "func_name": "my_function",
+        "name": "x",
+        "label": "int"
+    },
+    {
+        "dt": "param",
+        "func_name": "my_function",
+        "name": "y",
+        "label": "float"
+    },
+    {
+        "dt": "var",
+        "func_name": "my_function",
+        "name": "p",
+        "label": "int"
+    }
+]

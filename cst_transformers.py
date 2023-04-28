@@ -1,4 +1,5 @@
 import libcst as cst
+from libcst.metadata import PositionProvider, CodeRange
 
 
 class TypeAnnotationFinder(cst.CSTTransformer):
@@ -13,10 +14,15 @@ class TypeAnnotationFinder(cst.CSTTransformer):
             label: "Fool"
         }
     """
-
+    METADATA_DEPENDENCIES = (PositionProvider,)
     def __init__(self):
         super().__init__()
         self.annotated_types = []
+        self.var_list = set()
+
+    def __get_line_column_no(self, node):
+        lc = self.get_metadata(cst.metadata.PositionProvider, node)
+        return (lc.start.line, lc.start.column), (lc.end.line, lc.end.column)
 
     def visit_FunctionDef(self, original_node: cst.FunctionDef):
         # print(original_node)
@@ -32,16 +38,21 @@ class TypeAnnotationFinder(cst.CSTTransformer):
                 type_dict = dict(dt="param", func_name=original_node.name.value, name=param.name.value,
                                  label=param.annotation.annotation.value)
                 self.annotated_types.append(type_dict)
-        for statement in original_node.body:
-            # print(statement.body)
-            print(cst.ensure_type(statement.body, cst.AnnAssign).value)
-            if isinstance(statement.body, cst.AnnAssign):
-                type_dict = dict(dt="var", func_name=original_node.name.value, name=statement.body.target.value,
-                                 label=statement.body.annotation.annotation.value)
+        for statement in original_node.body.body:
+            if type(statement.body[0]) == cst.AnnAssign:
+                # print(statement.body[0])
+                # print(ranges[statement.body[0]].start)
+                type_dict = dict(dt="var", func_name=original_node.name.value, name=statement.body[0].target.value,
+                                 label=statement.body[0].annotation.annotation.value)
                 self.annotated_types.append(type_dict)
+                self.var_list.add(self.__get_line_column_no(statement.body[0]))
 
     def visit_AnnAssign(self, node: cst.AnnAssign) -> None:
-        print(f"Visited AnnAssign with target: {node.target}")
+        pos = self.__get_line_column_no(node)
+        if pos not in self.var_list:
+            type_dict = dict(dt="var", func_name="__global", name=node.target.value,
+                                 label=node.annotation.annotation.value)
+            self.annotated_types.append(type_dict)
 
     # def visit_Param(self, original_node: cst.Param):
     #     if original_node.annotation is not None:
