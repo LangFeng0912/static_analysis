@@ -23,12 +23,16 @@ def parse_pyright(p_dict, dt, name):
 
     else:
         if dt == "ret":
-            # print(type_str)
+            print(type_str)
             match = re.match(func_pattern, type_str)
-            if match and name == match.group(1):
+            # print(name)
+            # print(match.group(1))
+            if match:
                 sig = match.group(2)
-                # print(sig)
-                predict_ret = sig.split(" -> ")[1]
+                if "->" in sig:
+                    predict_ret = sig.split(" -> ")[1]
+                else:
+                    predict_ret = sig
                 return dict(name=match.group(1), type=predict_ret, task="return")
             else:
                 return None
