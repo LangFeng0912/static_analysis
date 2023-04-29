@@ -39,22 +39,26 @@ class TypeAnnotationFinder(cst.CSTTransformer):
                 type_dict = dict(dt="param", func_name=original_node.name.value, name=param.name.value,
                                  label=param.annotation.annotation.value, loc=self.__get_line_column_no(param))
                 self.annotated_types.append(type_dict)
-        for statement in original_node.body.body:
-            if type(statement.body[0]) == cst.AnnAssign:
-                # print(statement.body[0])
-                # print(ranges[statement.body[0]].start)
-                type_dict = dict(dt="var", func_name=original_node.name.value, name=statement.body[0].target.value,
-                                 label=statement.body[0].annotation.annotation.value,
-                                 loc=self.__get_line_column_no(statement.body[0]))
-                self.annotated_types.append(type_dict)
-                self.var_list.add(self.__get_line_column_no(statement.body[0]))
+        # for statement in original_node.body.body:
+        #     # print(statement)
+        #     if type(statement) == cst.SimpleStatementLine and type(statement.body[0]) == cst.AnnAssign:
+        #         # print(statement.body[0])
+        #         # print(ranges[statement.body[0]].start)
+        #         type_dict = dict(dt="var", func_name=original_node.name.value, name=statement.body[0].target.value,
+        #                          label=statement.body[0].annotation.annotation.value,
+        #                          loc=self.__get_line_column_no(statement.body[0]))
+        #         self.annotated_types.append(type_dict)
+        #         self.var_list.add(self.__get_line_column_no(statement.body[0]))
 
     def visit_AnnAssign(self, node: cst.AnnAssign) -> None:
         pos = self.__get_line_column_no(node)
+        node_module = cst.Module([node.annotation.annotation])
+        # print(node_module.code)
         if pos not in self.var_list:
             type_dict = dict(dt="var", func_name="__global__", name=node.target.value,
-                             label=node.annotation.annotation.value, loc=pos)
+                             label=node_module.code, loc=pos)
             self.annotated_types.append(type_dict)
+            self.var_list.add(pos)
 
 
 class TypeAnnotationMasker(cst.CSTTransformer):
@@ -74,7 +78,7 @@ class TypeAnnotationMasker(cst.CSTTransformer):
         return (lc.start.line, lc.start.column), (lc.end.line, lc.end.column)
 
     def leave_FunctionDef(self, original_node: cst.FunctionDef, updated_node):
-        # print(original_node)
+        # print(original_node.name.value)
         if self.find == False and original_node.name.value == self.target["func_name"]:
 
             # for return types
@@ -82,6 +86,8 @@ class TypeAnnotationMasker(cst.CSTTransformer):
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.name.value})"))
                 self.find = True
                 return cst.FlattenSentinel([updated_node.with_changes(returns=None), log_stmt])
+            else:
+                return updated_node
 
             # for parameters
             if self.dt == "param":
@@ -98,36 +104,45 @@ class TypeAnnotationMasker(cst.CSTTransformer):
                     params=cst.Parameters(updated_params)), log_stmt]
                 )
 
+            else:
+                return updated_node
+
             # variables in functions
-            if self.dt == "var":
-                statements = []
-                for statement in original_node.body.body:
-                    if type(statement.body[0]) == cst.AnnAssign and statement.body[0].target.value == self.target[
-                        "name"]:
-                        self.find = True
-                        log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({statement.body[0].target.value})"))
-                        updated_var_node = cst.Assign(targets=[cst.AssignTarget(target=statement.body[0].target)],
-                                                      value=statement.body[0].value)
-                        masrev_line = cst.SimpleStatementLine(cst.FlattenSentinel([updated_var_node, log_stmt]))
-                        statements.append(masrev_line)
-                    else:
-                        statements.append(statement)
-                return updated_node.with_changes(
-                    body=cst.IndentedBlock(statements)
-                )
+            # if self.dt == "var":
+            #     statements = []
+            #     print("yes")
+            #     for statement in original_node.body.body:
+            #         if type(statement.body[0]) == cst.AnnAssign and statement.body[0].target.value == self.target[
+            #             "name"]:
+            #             # print("yes")
+            #             self.find = True
+            #             log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({statement.body[0].target.value})"))
+            #             updated_var_node = cst.Assign(targets=[cst.AssignTarget(target=statement.body[0].target)],
+            #                                           value=statement.body[0].value)
+            #             masrev_line = cst.SimpleStatementLine(cst.FlattenSentinel([updated_var_node, log_stmt]))
+            #             statements.append(masrev_line)
+            #         else:
+            #             statements.append(statement)
+            #     return updated_node.with_changes(
+            #         body=cst.IndentedBlock(statements)
+            #     )
 
         else:
             return updated_node
 
     def leave_AnnAssign(self, original_node: cst.AnnAssign, updated_node) -> None:
+        # print(original_node)
         if self.find == False and self.dt == "var" and self.target["func_name"] == "__global__":
             pos = self.__get_line_column_no(original_node)
             if pos == self.target["loc"] and original_node.target.value == self.target["name"]:
+                print("yes")
                 self.find = True
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.target.value})"))
                 updated_node = cst.Assign(targets=[cst.AssignTarget(target=original_node.target)],
                                           value=original_node.value)
                 return cst.FlattenSentinel([updated_node, log_stmt])
+            else:
+                return updated_node
         else:
             return updated_node
 
