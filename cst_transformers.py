@@ -86,16 +86,16 @@ class TypeAnnotationMasker(cst.CSTTransformer):
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.name.value})"))
                 self.find = True
                 return cst.FlattenSentinel([updated_node.with_changes(returns=None), log_stmt])
-            else:
-                return updated_node
+
+
 
             # for parameters
-            if self.dt == "param":
+            elif self.dt == "param":
                 updated_params = []
                 for param in original_node.params.params:
                     if param.name.value == self.target["name"]:
                         self.find = True
-                        param_untyped = cst.Param(param.with_changes(annotation=None, comma=None))
+                        param_untyped = param.with_changes(annotation=None, comma=None)
                         updated_params.append(param_untyped)
                     else:
                         updated_params.append(param)
@@ -135,7 +135,6 @@ class TypeAnnotationMasker(cst.CSTTransformer):
         if self.find == False and self.dt == "var" and self.target["func_name"] == "__global__":
             pos = self.__get_line_column_no(original_node)
             if pos == self.target["loc"] and original_node.target.value == self.target["name"]:
-                print("yes")
                 self.find = True
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.target.value})"))
                 updated_node = cst.Assign(targets=[cst.AssignTarget(target=original_node.target)],

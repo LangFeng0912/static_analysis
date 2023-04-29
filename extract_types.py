@@ -1,7 +1,7 @@
 import libcst as cst
 from cst_transformers import TypeAnnotationFinder, TypeAnnotationMasker
 import json
-from libsa4py.utils import write_file, read_file, list_files
+from libsa4py.utils import write_file, read_file, list_files, save_json
 from utils import pyright_infer
 import os
 from tqdm import tqdm
@@ -27,15 +27,21 @@ def mask_reveal(code, type):
 
 
 if __name__ == '__main__':
+    t_list = []
     files = list_files("/data/0x0FB0/pulsar")
     for file in tqdm(files):
         code = read_file(file)
         type_list = extract(code)
         for type in type_list:
-            print(type)
+            # print(type)
             code_org = code
             # print(code_org)
             code_masked = mask_reveal(code_org, type)
             write_file("temp.py", code_masked)
-            pyright_infer("temp.py")
+            predict = pyright_infer("temp.py", type["dt"], type["name"])
+            if predict is not None:
+                predict["label"] = type["label"]
+                t_list.append(predict)
             os.remove("temp.py")
+    print(t_list)
+    save_json("predictions.json", t_list)
