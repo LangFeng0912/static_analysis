@@ -23,7 +23,7 @@ def parse_pyright(p_dict, dt, name):
 
     else:
         if dt == "ret":
-            print(type_str)
+            # print(type_str)
             match = re.match(func_pattern, type_str)
             # print(name)
             # print(match.group(1))
@@ -37,6 +37,7 @@ def parse_pyright(p_dict, dt, name):
             else:
                 return None
         elif dt == "param":
+            # print(type_str)
             match = re.match(func_pattern, type_str)
             if match:
                 param_sig = match.group(2).split(" -> ")[0]

@@ -28,20 +28,33 @@ def mask_reveal(code, type):
 
 if __name__ == '__main__':
     t_list = []
-    files = list_files("/data/0x0FB0/pulsar")
+    files = list_files("/data/acoustid/acoustid-server")
     for file in tqdm(files):
+        # print(file)
         code = read_file(file)
         type_list = extract(code)
-        for type in type_list:
+        for type_info in type_list:
             # print(type)
+            if type_info["label"] in ["None", "typing.Any"]:
+                continue
+            label = type_info["label"]
+            # print(type(label))
+            if type(label) == cst._nodes.expression.Name:
+                # print(label.value)
+                label = type_info["label"]
+            elif type(label) == cst._nodes.expression.Attribute:
+                # print(label)
+                label = type_info["label"]
+            # print(type(label))
             code_org = code
             # print(code_org)
-            code_masked = mask_reveal(code_org, type)
+            code_masked = mask_reveal(code_org, type_info)
             write_file("temp.py", code_masked)
-            predict = pyright_infer("temp.py", type["dt"], type["name"])
+            predict = pyright_infer("temp.py", type_info["dt"], type_info["name"])
             if predict is not None:
-                predict["label"] = type["label"]
+                predict["label"] = label
                 t_list.append(predict)
+                # print(predict)
             os.remove("temp.py")
     print(t_list)
-    save_json("predictions.json", t_list)
+    save_json("predictions1.json", t_list)

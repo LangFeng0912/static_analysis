@@ -29,15 +29,18 @@ class TypeAnnotationFinder(cst.CSTTransformer):
         # print(original_node)
         if original_node.returns is not None:
             # print(f"{original_node.name.value}: {original_node.returns.annotation.value}")
+            node_module = cst.Module([original_node.returns.annotation])
+            # print(node_module.code)
             type_dict = dict(dt="ret", func_name=original_node.name.value, name="ret_type",
-                             label=original_node.returns.annotation.value)
+                             label=node_module.code)
             self.annotated_types.append(type_dict)
             # annotated_functions.append(original_node)
         for param in original_node.params.params:
             # print(param)
             if param.annotation is not None:
+                node_module = cst.Module([param.annotation.annotation])
                 type_dict = dict(dt="param", func_name=original_node.name.value, name=param.name.value,
-                                 label=param.annotation.annotation.value, loc=self.__get_line_column_no(param))
+                                 label=node_module.code, loc=self.__get_line_column_no(param))
                 self.annotated_types.append(type_dict)
         # for statement in original_node.body.body:
         #     # print(statement)
@@ -89,10 +92,12 @@ class TypeAnnotationMasker(cst.CSTTransformer):
 
 
 
-            # for parameters
+            # for parameterss
             elif self.dt == "param":
                 updated_params = []
                 for param in original_node.params.params:
+                    # print(param.name.value)
+                    # print(self.target["name"])
                     if param.name.value == self.target["name"]:
                         self.find = True
                         param_untyped = param.with_changes(annotation=None, comma=None)
@@ -137,8 +142,12 @@ class TypeAnnotationMasker(cst.CSTTransformer):
             if pos == self.target["loc"] and original_node.target.value == self.target["name"]:
                 self.find = True
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.target.value})"))
-                updated_node = cst.Assign(targets=[cst.AssignTarget(target=original_node.target)],
-                                          value=original_node.value)
+                if original_node.value == None:
+                    updated_node = cst.Assign(targets=[cst.AssignTarget(target=original_node.target)],
+                                              value=cst.Ellipsis())
+                else:
+                    updated_node = cst.Assign(targets=[cst.AssignTarget(target=original_node.target)],
+                                              value=original_node.value)
                 return cst.FlattenSentinel([updated_node, log_stmt])
             else:
                 return updated_node
