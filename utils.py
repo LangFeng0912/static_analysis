@@ -3,11 +3,13 @@ import json
 import re
 import os
 from os.path import join, exists, isdir
+import libcst as cst
 
 var_pattern = r'Type of "(\w+)" is "(\w+)"'
 func_pattern = r'Type of "(.+)" is "(.+)"'
 param_pattern = r"(\w+): (\w+(?:\[.*?\])?)"
 desp_pattern = r'^Revealed type \[-1\]: Revealed type for `([\w\.]+)` is `(.+?)`(?: \(inferred: `(.+?)`\))?\.$'
+pyre_func_pattern = r'typing.Callable\("(\w+)"\)\[\]'
 
 def run_command(cmd_args, timeout):
     process = subprocess.run(cmd_args, shell=True, capture_output=True, timeout=timeout)
@@ -57,13 +59,36 @@ def parse_pyright(p_dict, dt, name):
 
 def parse_pyre(p_dict, dt, name):
     description = p_dict["description"]
-    # print(description)
+    print(description)
     match = re.match(desp_pattern, description)
     if match:
-        print(match.group(1))
-        print(match.group(2))
-    else:
-        print(description)
+        if dt == "var":
+            if name == match.group(1):
+                return dict(name=match.group(1), type=match.group(2), task="var")
+            else:
+                return None
+        else:
+            sig = match.group(2)
+            print(sig)
+            if "typing.Callable" not in sig:
+                return None
+            print(sig)
+            tree = cst.parse_expression(sig)
+
+            if dt == "ret":
+                func_name = tree.value.args[0].value.value
+                ret_type = cst.Module([tree.slice[-1]]).code
+                return dict(name = func_name, type = ret_type, task="return")
+
+            if dt == "param":
+                # print(sig)
+                # /print(tree)
+                for element in tree.slice[0].slice.value.elements:
+                    if element.value.args[0].value.value == name:
+                        param_node = cst.Module(element.value.args[1].value)
+                        param_type = param_node.code_for_node(param_node.body)
+                        return dict(name = name, type = param_type, task = "param")
+
 
 
 def start_pyre(project_path):
@@ -97,7 +122,8 @@ def pyre_infer(project_path, file_path, dt, name):
     output = json.loads(stdout)
     for dict in output:
         if dict["name"]=="Revealed type":
-            parse_pyre(dict, dt, name)
+            t_dict = parse_pyre(dict, dt, name)
+            return t_dict
 
 
 
