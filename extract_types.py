@@ -2,12 +2,13 @@ import libcst as cst
 from cst_transformers import TypeAnnotationFinder, TypeAnnotationMasker
 import json
 from libsa4py.utils import write_file, read_file, list_files, save_json, find_repos_list, ParallelExecutor
-from utils import pyright_infer
+from utils import pyright_infer, start_pyre, pyre_infer, stop_pyre
 import os
 from tqdm import tqdm
 import time
 from joblib import delayed
 from datetime import timedelta
+import shutil
 
 
 def extract(code):
@@ -35,6 +36,10 @@ def process(project_path):
     id_tuple = (project_author, project_name)
     t_list = []
     files = list_files(project_path)
+    # make a dir for pyre project
+    tar_dir = f"{project_author}{project_name}_dir"
+    os.makedirs(tar_dir)
+    pyrestart = start_pyre(tar_dir)
     for file in tqdm(files):
         # print(file)
         code = read_file(file)
@@ -58,7 +63,12 @@ def process(project_path):
             code_masked = mask_reveal(code_org, type_info)
             write_file(f"{project_author}{project_name}.py", code_masked)
             cur_time = time.time()
-            predict = pyright_infer(f"{project_author}{project_name}.py", type_info["dt"], type_info["name"])
+            predict = None
+            # for pyre
+            if pyrestart:
+                predict = pyre_infer(tar_dir, f"{project_author}{project_name}.py", type_info["dt"], type_info["name"])
+            # for pyright
+            # predict = pyright_infer(f"{project_author}{project_name}.py", type_info["dt"], type_info["name"])
             if predict is not None:
                 predict["label"] = label
                 predict["time"] = str(timedelta(seconds=time.time() - cur_time))
@@ -68,6 +78,8 @@ def process(project_path):
     print(len(t_list))
     json_path = f"{project_author}{project_name}_predict.json"
     save_json(os.path.join("/predict_dir", json_path), t_list)
+    stop_pyre(tar_dir)
+    shutil.rmtree(tar_dir)
 
 
 def run(projects_path, repos_list, jobs=8, start=0):

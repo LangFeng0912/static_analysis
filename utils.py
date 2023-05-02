@@ -117,6 +117,9 @@ def start_pyre(project_path):
     else:
         return False
 
+def stop_pyre(project_path):
+    stdout, stderr, r_code = run_command("cd %s ; pyre stop" % project_path)
+
 def pyre_infer(project_path, file_path, dt, name):
     stdout, stderr, r_code = run_command("cd %s; pyre --output json" % project_path, 60)
     output = json.loads(stdout)
