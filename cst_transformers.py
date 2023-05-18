@@ -27,12 +27,13 @@ class TypeAnnotationFinder(cst.CSTTransformer):
 
     def visit_FunctionDef(self, original_node: cst.FunctionDef):
         # print(original_node)
+        fn_pos = self.__get_line_column_no(original_node)
         if original_node.returns is not None:
             # print(f"{original_node.name.value}: {original_node.returns.annotation.value}")
             node_module = cst.Module([original_node.returns.annotation])
             # print(node_module.code)
             type_dict = dict(dt="ret", func_name=original_node.name.value, name="ret_type",
-                             label=node_module.code)
+                             label=node_module.code, fn_loc = fn_pos)
             self.annotated_types.append(type_dict)
             # annotated_functions.append(original_node)
         for param in original_node.params.params:
@@ -40,7 +41,7 @@ class TypeAnnotationFinder(cst.CSTTransformer):
             if param.annotation is not None:
                 node_module = cst.Module([param.annotation.annotation])
                 type_dict = dict(dt="param", func_name=original_node.name.value, name=param.name.value,
-                                 label=node_module.code, loc=self.__get_line_column_no(param))
+                                 label=node_module.code, fn_loc=fn_pos)
                 self.annotated_types.append(type_dict)
         # for statement in original_node.body.body:
         #     # print(statement)
@@ -59,7 +60,7 @@ class TypeAnnotationFinder(cst.CSTTransformer):
         # print(node_module.code)
         if pos not in self.var_list:
             type_dict = dict(dt="var", func_name="__global__", name=node.target.value,
-                             label=node_module.code, loc=pos)
+                             label=node_module.code, var_loc=pos)
             self.annotated_types.append(type_dict)
             self.var_list.add(pos)
 
@@ -82,15 +83,14 @@ class TypeAnnotationMasker(cst.CSTTransformer):
 
     def leave_FunctionDef(self, original_node: cst.FunctionDef, updated_node):
         # print(original_node.name.value)
-        if self.find == False and original_node.name.value == self.target["func_name"]:
+        fn_pos = self.__get_line_column_no(original_node)
+        if self.find == False and fn_pos == self.target["fn_loc"]:
 
             # for return types
             if self.dt == "ret" and original_node.returns is not None:
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.name.value})"))
                 self.find = True
                 return cst.FlattenSentinel([updated_node.with_changes(returns=None), log_stmt])
-
-
 
             # for parameterss
             elif self.dt == "param":
@@ -112,26 +112,6 @@ class TypeAnnotationMasker(cst.CSTTransformer):
             else:
                 return updated_node
 
-            # variables in functions
-            # if self.dt == "var":
-            #     statements = []
-            #     print("yes")
-            #     for statement in original_node.body.body:
-            #         if type(statement.body[0]) == cst.AnnAssign and statement.body[0].target.value == self.target[
-            #             "name"]:
-            #             # print("yes")
-            #             self.find = True
-            #             log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({statement.body[0].target.value})"))
-            #             updated_var_node = cst.Assign(targets=[cst.AssignTarget(target=statement.body[0].target)],
-            #                                           value=statement.body[0].value)
-            #             masrev_line = cst.SimpleStatementLine(cst.FlattenSentinel([updated_var_node, log_stmt]))
-            #             statements.append(masrev_line)
-            #         else:
-            #             statements.append(statement)
-            #     return updated_node.with_changes(
-            #         body=cst.IndentedBlock(statements)
-            #     )
-
         else:
             return updated_node
 
@@ -139,7 +119,7 @@ class TypeAnnotationMasker(cst.CSTTransformer):
         # print(original_node)
         if self.find == False and self.dt == "var" and self.target["func_name"] == "__global__":
             pos = self.__get_line_column_no(original_node)
-            if pos == self.target["loc"] and original_node.target.value == self.target["name"]:
+            if pos == self.target["var_loc"] and original_node.target.value == self.target["name"]:
                 self.find = True
                 log_stmt = cst.Expr(cst.parse_expression(f"reveal_type({updated_node.target.value})"))
                 if original_node.value == None:
@@ -153,5 +133,4 @@ class TypeAnnotationMasker(cst.CSTTransformer):
                 return updated_node
         else:
             return updated_node
-
 
