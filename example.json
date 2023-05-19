@@ -1,56 +1,1134 @@
 [
     {
-        "dt": "var",
-        "func_name": "__global",
-        "name": "p",
-        "label": "str",
-        "loc": [
-            [
-                2,
-                0
-            ],
-            [
-                2,
-                16
-            ]
+        "/dataset/0x0FB0/pulsar/portal/pulsar/models.py": [
+            {
+                "name": "__str__",
+                "type": "Unknown",
+                "task": "return",
+                "label": "str",
+                "loc": [
+                    [
+                        86,
+                        4
+                    ],
+                    [
+                        87,
+                        61
+                    ]
+                ]
+            },
+            {
+                "name": "__sha__",
+                "type": "Unknown",
+                "task": "return",
+                "label": "hashlib._Hash",
+                "loc": [
+                    [
+                        298,
+                        4
+                    ],
+                    [
+                        310,
+                        55
+                    ]
+                ]
+            },
+            {
+                "name": "__str__",
+                "type": "Unknown",
+                "task": "return",
+                "label": "str",
+                "loc": [
+                    [
+                        340,
+                        4
+                    ],
+                    [
+                        341,
+                        47
+                    ]
+                ]
+            }
         ]
     },
     {
-        "dt": "ret",
-        "func_name": "my_function",
-        "name": "ret_type",
-        "label": "int"
-    },
-    {
-        "dt": "param",
-        "func_name": "my_function",
-        "name": "x",
-        "label": "int",
-        "loc": [
-            [
-                3,
-                16
-            ],
-            [
-                3,
-                17
-            ]
+        "/dataset/0x0FB0/pulsar/portal/pulsar/serializers.py": [
+            {
+                "name": "to_internal_value",
+                "type": "Unknown",
+                "task": "return",
+                "label": "str",
+                "loc": [
+                    [
+                        16,
+                        4
+                    ],
+                    [
+                        24,
+                        19
+                    ]
+                ]
+            },
+            {
+                "name": "to_internal_value",
+                "type": "Unknown",
+                "task": "return",
+                "label": "str",
+                "loc": [
+                    [
+                        55,
+                        4
+                    ],
+                    [
+                        65,
+                        90
+                    ]
+                ]
+            }
         ]
     },
     {
-        "dt": "param",
-        "func_name": "my_function",
-        "name": "y",
-        "label": "float",
-        "loc": [
-            [
-                3,
-                24
-            ],
-            [
-                3,
-                25
-            ]
+        "/dataset/0x0FB0/pulsar/portal/pulsar/admin.py": [
+            {
+                "name": "model",
+                "type": "Unknown",
+                "task": "var",
+                "label": "Type[portal.pulsar.models.CollaborationGroup]",
+                "loc": [
+                    [
+                        14,
+                        8
+                    ],
+                    [
+                        14,
+                        13
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/apps.py": [
+            {
+                "name": "name",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        5,
+                        4
+                    ],
+                    [
+                        5,
+                        8
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/views.py": [
+            {
+                "name": "model_field_exists",
+                "type": "Unknown",
+                "task": "return",
+                "label": "bool",
+                "loc": [
+                    [
+                        43,
+                        4
+                    ],
+                    [
+                        49,
+                        24
+                    ]
+                ]
+            },
+            {
+                "name": "get_csv",
+                "type": "bytes",
+                "task": "return",
+                "label": "bytes",
+                "loc": [
+                    [
+                        118,
+                        0
+                    ],
+                    [
+                        170,
+                        17
+                    ]
+                ]
+            },
+            {
+                "name": "get_markdown",
+                "type": "(str | Literal[False])",
+                "task": "return",
+                "label": "Union[bool, str]",
+                "loc": [
+                    [
+                        172,
+                        0
+                    ],
+                    [
+                        261,
+                        20
+                    ]
+                ]
+            },
+            {
+                "name": "get_pdf",
+                "type": "bytes",
+                "task": "return",
+                "label": "bytes",
+                "loc": [
+                    [
+                        264,
+                        0
+                    ],
+                    [
+                        282,
+                        17
+                    ]
+                ]
+            },
+            {
+                "name": "md",
+                "type": "Unknown",
+                "task": "parameter",
+                "label": "str",
+                "loc": [
+                    [
+                        264,
+                        0
+                    ],
+                    [
+                        282,
+                        17
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/scanner_utils.py": [
+            {
+                "name": "upload_sandboxed_content",
+                "type": "Unknown",
+                "task": "return",
+                "label": "str",
+                "loc": [
+                    [
+                        132,
+                        4
+                    ],
+                    [
+                        134,
+                        27
+                    ]
+                ]
+            },
+            {
+                "name": "remove_sandboxed",
+                "type": "Unknown",
+                "task": "return",
+                "label": "bool",
+                "loc": [
+                    [
+                        140,
+                        4
+                    ],
+                    [
+                        142,
+                        19
+                    ]
+                ]
+            },
+            {
+                "name": "url",
+                "type": "Unknown",
+                "task": "parameter",
+                "label": "str",
+                "loc": [
+                    [
+                        171,
+                        0
+                    ],
+                    [
+                        178,
+                        12
+                    ]
+                ]
+            },
+            {
+                "name": "updateNVDFeed",
+                "type": "(str | None)",
+                "task": "return",
+                "label": "Optional[str]",
+                "loc": [
+                    [
+                        181,
+                        0
+                    ],
+                    [
+                        348,
+                        59
+                    ]
+                ]
+            },
+            {
+                "name": "getCountryData",
+                "type": "(Unknown | Literal['NA'])",
+                "task": "return",
+                "label": "str",
+                "loc": [
+                    [
+                        402,
+                        0
+                    ],
+                    [
+                        438,
+                        19
+                    ]
+                ]
+            },
+            {
+                "name": "aBulkRecordLookup",
+                "type": "list[Unknown]",
+                "task": "return",
+                "label": "List[Dict[str, Any]]",
+                "loc": [
+                    [
+                        488,
+                        0
+                    ],
+                    [
+                        522,
+                        15
+                    ]
+                ]
+            },
+            {
+                "name": "health_check",
+                "type": "bool",
+                "task": "parameter",
+                "label": "bool",
+                "loc": [
+                    [
+                        488,
+                        0
+                    ],
+                    [
+                        522,
+                        15
+                    ]
+                ]
+            },
+            {
+                "name": "calc_asset_by_task",
+                "type": "float",
+                "task": "return",
+                "label": "float",
+                "loc": [
+                    [
+                        574,
+                        0
+                    ],
+                    [
+                        655,
+                        22
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/ServiceVulnScanPlugin.py": [
+            {
+                "name": "plugin",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        13,
+                        4
+                    ],
+                    [
+                        13,
+                        10
+                    ]
+                ]
+            },
+            {
+                "name": "name",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        14,
+                        4
+                    ],
+                    [
+                        14,
+                        8
+                    ]
+                ]
+            },
+            {
+                "name": "short",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        15,
+                        4
+                    ],
+                    [
+                        15,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "reference",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        16,
+                        4
+                    ],
+                    [
+                        16,
+                        13
+                    ]
+                ]
+            },
+            {
+                "name": "description",
+                "type": "Any",
+                "task": "var",
+                "label": "LiteralString",
+                "loc": [
+                    [
+                        51,
+                        28
+                    ],
+                    [
+                        51,
+                        39
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/HandMadePlugin.py": [
+            {
+                "name": "sandbox",
+                "type": "Unknown",
+                "task": "var",
+                "label": "portal.pulsar.modules.scanner_utils.Sandbox",
+                "loc": [
+                    [
+                        12,
+                        0
+                    ],
+                    [
+                        12,
+                        7
+                    ]
+                ]
+            },
+            {
+                "name": "plugin",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        16,
+                        4
+                    ],
+                    [
+                        16,
+                        10
+                    ]
+                ]
+            },
+            {
+                "name": "short",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        17,
+                        4
+                    ],
+                    [
+                        17,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "dom",
+                "type": "Unknown",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        21,
+                        8
+                    ],
+                    [
+                        21,
+                        11
+                    ]
+                ]
+            },
+            {
+                "name": "cmd",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        33,
+                        8
+                    ],
+                    [
+                        33,
+                        11
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/TheHarvesterPlugin.py": [
+            {
+                "name": "getYahoo",
+                "type": "(Unknown | Literal[''])",
+                "task": "return",
+                "label": "str",
+                "loc": [
+                    [
+                        62,
+                        0
+                    ],
+                    [
+                        68,
+                        16
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/TLSCertVerifyPlugin.py": [
+            {
+                "name": "sandbox",
+                "type": "Unknown",
+                "task": "var",
+                "label": "portal.pulsar.modules.scanner_utils.Sandbox",
+                "loc": [
+                    [
+                        11,
+                        0
+                    ],
+                    [
+                        11,
+                        7
+                    ]
+                ]
+            },
+            {
+                "name": "result",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        21,
+                        8
+                    ],
+                    [
+                        21,
+                        14
+                    ]
+                ]
+            },
+            {
+                "name": "plugin",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        32,
+                        4
+                    ],
+                    [
+                        32,
+                        10
+                    ]
+                ]
+            },
+            {
+                "name": "short",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        33,
+                        4
+                    ],
+                    [
+                        33,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "name",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        34,
+                        4
+                    ],
+                    [
+                        34,
+                        8
+                    ]
+                ]
+            },
+            {
+                "name": "confidence",
+                "type": "float",
+                "task": "var",
+                "label": "float",
+                "loc": [
+                    [
+                        36,
+                        4
+                    ],
+                    [
+                        36,
+                        14
+                    ]
+                ]
+            },
+            {
+                "name": "score",
+                "type": "float",
+                "task": "var",
+                "label": "float",
+                "loc": [
+                    [
+                        37,
+                        4
+                    ],
+                    [
+                        37,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "reference",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        38,
+                        4
+                    ],
+                    [
+                        38,
+                        13
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/TLDExpansionPlugin.py": [
+            {
+                "name": "check_favicon",
+                "type": "Unknown",
+                "task": "return",
+                "label": "Optional[str]",
+                "loc": [
+                    [
+                        53,
+                        4
+                    ],
+                    [
+                        61,
+                        20
+                    ]
+                ]
+            },
+            {
+                "name": "check_links",
+                "type": "Unknown",
+                "task": "return",
+                "label": "Optional[bool]",
+                "loc": [
+                    [
+                        63,
+                        4
+                    ],
+                    [
+                        75,
+                        24
+                    ]
+                ]
+            },
+            {
+                "name": "check_tld",
+                "type": "Unknown",
+                "task": "return",
+                "label": "str",
+                "loc": [
+                    [
+                        77,
+                        4
+                    ],
+                    [
+                        95,
+                        28
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/CloudEnumPlugin.py": [
+            {
+                "name": "sandbox",
+                "type": "Unknown",
+                "task": "var",
+                "label": "portal.pulsar.modules.scanner_utils.Sandbox",
+                "loc": [
+                    [
+                        11,
+                        0
+                    ],
+                    [
+                        11,
+                        7
+                    ]
+                ]
+            },
+            {
+                "name": "plugin",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        16,
+                        4
+                    ],
+                    [
+                        16,
+                        10
+                    ]
+                ]
+            },
+            {
+                "name": "short",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        17,
+                        4
+                    ],
+                    [
+                        17,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "name",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        18,
+                        4
+                    ],
+                    [
+                        18,
+                        8
+                    ]
+                ]
+            },
+            {
+                "name": "confidence",
+                "type": "float",
+                "task": "var",
+                "label": "float",
+                "loc": [
+                    [
+                        20,
+                        4
+                    ],
+                    [
+                        20,
+                        14
+                    ]
+                ]
+            },
+            {
+                "name": "score",
+                "type": "float",
+                "task": "var",
+                "label": "float",
+                "loc": [
+                    [
+                        21,
+                        4
+                    ],
+                    [
+                        21,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "reference",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        22,
+                        4
+                    ],
+                    [
+                        22,
+                        13
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/WeakSSHAlgoPlugin.py": [
+            {
+                "name": "sandbox",
+                "type": "Unknown",
+                "task": "var",
+                "label": "portal.pulsar.modules.scanner_utils.Sandbox",
+                "loc": [
+                    [
+                        11,
+                        0
+                    ],
+                    [
+                        11,
+                        7
+                    ]
+                ]
+            },
+            {
+                "name": "plugin",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        16,
+                        4
+                    ],
+                    [
+                        16,
+                        10
+                    ]
+                ]
+            },
+            {
+                "name": "name",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        17,
+                        4
+                    ],
+                    [
+                        17,
+                        8
+                    ]
+                ]
+            },
+            {
+                "name": "short",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        18,
+                        4
+                    ],
+                    [
+                        18,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "confidence",
+                "type": "float",
+                "task": "var",
+                "label": "float",
+                "loc": [
+                    [
+                        20,
+                        4
+                    ],
+                    [
+                        20,
+                        14
+                    ]
+                ]
+            },
+            {
+                "name": "score",
+                "type": "float",
+                "task": "var",
+                "label": "float",
+                "loc": [
+                    [
+                        21,
+                        4
+                    ],
+                    [
+                        21,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "reference",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        22,
+                        4
+                    ],
+                    [
+                        22,
+                        13
+                    ]
+                ]
+            },
+            {
+                "name": "dom",
+                "type": "Unknown",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        27,
+                        8
+                    ],
+                    [
+                        27,
+                        11
+                    ]
+                ]
+            },
+            {
+                "name": "cmd",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        33,
+                        20
+                    ],
+                    [
+                        33,
+                        23
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/ServiceInfoPlugin.py": [
+            {
+                "name": "plugin",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        12,
+                        4
+                    ],
+                    [
+                        12,
+                        10
+                    ]
+                ]
+            },
+            {
+                "name": "name",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        13,
+                        4
+                    ],
+                    [
+                        13,
+                        8
+                    ]
+                ]
+            },
+            {
+                "name": "short",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        14,
+                        4
+                    ],
+                    [
+                        14,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "info",
+                "type": "bool",
+                "task": "var",
+                "label": "bool",
+                "loc": [
+                    [
+                        16,
+                        4
+                    ],
+                    [
+                        16,
+                        8
+                    ]
+                ]
+            },
+            {
+                "name": "confidence",
+                "type": "float",
+                "task": "var",
+                "label": "float",
+                "loc": [
+                    [
+                        17,
+                        4
+                    ],
+                    [
+                        17,
+                        14
+                    ]
+                ]
+            },
+            {
+                "name": "score",
+                "type": "float",
+                "task": "var",
+                "label": "float",
+                "loc": [
+                    [
+                        18,
+                        4
+                    ],
+                    [
+                        18,
+                        9
+                    ]
+                ]
+            },
+            {
+                "name": "reference",
+                "type": "str",
+                "task": "var",
+                "label": "str",
+                "loc": [
+                    [
+                        19,
+                        4
+                    ],
+                    [
+                        19,
+                        13
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "/dataset/0x0FB0/pulsar/portal/pulsar/modules/plugins/AmassPlugin.py": [
+            {
+                "name": "isWildcardDom",
+                "type": "bool",
+                "task": "return",
+                "label": "bool",
+                "loc": [
+                    [
+                        17,
+                        0
+                    ],
+                    [
+                        22,
+                        20
+                    ]
+                ]
+            },
+            {
+                "name": "aMassSubFind",
+                "type": "list[Unknown]",
+                "task": "return",
+                "label": "List[Dict[str, Any]]",
+                "loc": [
+                    [
+                        25,
+                        0
+                    ],
+                    [
+                        80,
+                        15
+                    ]
+                ]
+            }
         ]
     }
 ]
