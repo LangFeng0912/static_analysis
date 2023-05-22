@@ -134,3 +134,46 @@ class TypeAnnotationMasker(cst.CSTTransformer):
         else:
             return updated_node
 
+
+class UnTypeFinder(cst.CSTTransformer):
+    """
+    It finds all type annotations from a source code
+    use a dict object for saving the type information:
+    for example:
+        {
+            dt: "param",
+            func_name: "my_foo",
+            name: "foo",
+            label: "Fool"
+        }
+    """
+    METADATA_DEPENDENCIES = (PositionProvider,)
+
+    def __init__(self):
+        super().__init__()
+        self.empty_types = []
+        self.var_list = set()
+
+    def __get_line_column_no(self, node):
+        lc = self.get_metadata(cst.metadata.PositionProvider, node)
+        return (lc.start.line, lc.start.column), (lc.end.line, lc.end.column)
+
+    def visit_FunctionDef(self, original_node: cst.FunctionDef):
+        fn_pos = self.__get_line_column_no(original_node)
+        if original_node.returns is None:
+            type_dict = dict(dt="ret", func_name=original_node.name.value, name="ret_type", loc=fn_pos)
+            self.empty_types.append(type_dict)
+        for param in original_node.params.params:
+            if param.name.value != "self" and param.annotation is None:
+                type_dict = dict(dt="param", func_name=original_node.name.value, name=param.name.value, loc=fn_pos)
+                self.empty_types.append(type_dict)
+
+    def visit_Assign(self, node: cst.Assign) -> None:
+        for assign_target in node.targets:
+            pos = self.__get_line_column_no(assign_target.target)
+            if type(assign_target.target.value) == str and pos not in self.var_list:
+                print(assign_target.target.value)
+                type_dict = dict(dt="var", func_name="__global__", name=assign_target.target.value,
+                                 loc=pos)
+                self.empty_types.append(type_dict)
+                self.var_list.add(pos)
