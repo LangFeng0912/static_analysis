@@ -105,11 +105,15 @@ def run_command(cmd_args, timeout):
     return process.stdout.decode(), process.stderr.decode(), process.returncode
 
 def pyright_infer(file_path, dt: str, name: str):
-    stdout, stderr, r_code = run_command("pyright %s --outputjson" % file_path, 60)
-    output = json.loads(stdout)
-    for dict in output["generalDiagnostics"]:
-        if dict["severity"] == "information":
-            t_dict = parse_pyright(dict, dt, name)
-            if t_dict is not None:
-                return t_dict
+    try:
+        stdout, stderr, r_code = run_command("pyright %s --outputjson" % file_path, 60)
+        output = json.loads(stdout)
+        for dict in output["generalDiagnostics"]:
+            if dict["severity"] == "information":
+                t_dict = parse_pyright(dict, dt, name)
+                if t_dict is not None:
+                    return t_dict
+    except Exception as e:
+        print(str(e))
+        pass
 
